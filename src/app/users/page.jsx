@@ -7,16 +7,20 @@ import { UserCreateDialog } from "./user-create-dialog";
 import { useEffect, useState } from "react";
 
 const Users = () => {
+  const [limit, setLimit] = useState(10);
   const [data, setData] = useState([]);
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [hasMoreData, setHasMoreData] = useState(true); 
 
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
+      
+        setHasMoreData(data.length > limit);
       });
-  }, []);
+  }, [limit]);
 
   return (
     <div>
@@ -30,16 +34,16 @@ const Users = () => {
           </div>
         </CardHeader>
         <CardContent>
-          {data.length > 0 && <UsersTable data={data} />}
-          <div
-            className="p-8 flex justify-center
-          "
-          >
-            <button variant="outline">Load more...</button>
-          </div>
+          <UsersTable limit={limit} data={data} />
+          {hasMoreData && (
+            <div className="p-8 flex justify-center">
+              <button onClick={() => setLimit(limit + 10)} variant="outline">
+                Load more...
+              </button>
+            </div>
+          )}
         </CardContent>
       </Card>
-
       <UserCreateDialog open={createModalOpen} onClose={setCreateModalOpen} />
     </div>
   );

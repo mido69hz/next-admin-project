@@ -21,10 +21,19 @@ export const UserCreateDialog = ({ open, onClose }) => {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => onClose(false)} variant="outline" type="button">
+          <Button
+            onClick={() => onClose(false)}
+            variant="outline"
+            type="button"
+          >
             Cancel
           </Button>
-          <Button type="submit">Save</Button>
+          <Button
+            type="submit"
+            onClick="{data.length > 0 && <UsersTable data={data} />}"
+          >
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
